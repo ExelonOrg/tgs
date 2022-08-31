@@ -9,9 +9,8 @@ import (
 	"log"
 	"os"
 
-	"github.com/davoodharun/terragrunt-scaffolder/structs"
+	"github.com/davoodharun/terragrunt-scaffolder/helpers"
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
 )
 
 // createCmd represents the create command
@@ -25,17 +24,19 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		viper.SetConfigType("json")
-		viper.SetConfigName("config")
-		viper.AddConfigPath(".tgs")
-		if err := viper.ReadInConfig(); err != nil {
-			log.Fatalf("Error reading config file, %s", err)
-		}
-		var config structs.Config
-		err := viper.Unmarshal(&config)
-		if err != nil {
-			log.Fatalf("unable to decode into struct, %v", err)
-		}
+		// viper.SetConfigType("json")
+		// viper.SetConfigName("config")
+		// viper.AddConfigPath(".tgs")
+		// if err := viper.ReadInConfig(); err != nil {
+		// 	log.Fatalf("Error reading config file, %s", err)
+		// }
+		// var config structs.Config
+		// err := viper.Unmarshal(&config)
+		// if err != nil {
+		// 	log.Fatalf("unable to decode into struct, %v", err)
+		// }
+
+		var config = helpers.ReadConfig()
 
 		for group_key, v := range config.Groups {
 			var group []string
@@ -65,8 +66,7 @@ to quickly create a Cobra application.`,
 		}
 
 		for i := 0; i < len(config.BaseModules); i++ {
-			var str string
-			str = fmt.Sprintf("_base_modules/%s", config.BaseModules[i])
+			var str = fmt.Sprintf("_base_modules/%s", config.BaseModules[i])
 			if err := os.MkdirAll(str, os.ModePerm); err != nil {
 				log.Fatal(err)
 			}
