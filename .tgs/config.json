@@ -1,0 +1,40 @@
+{
+  "base_modules": [
+    "functionapp",
+    "servicebus"
+  ],
+  "groups": {
+    "non_production": {
+      "dev": {
+        "functionapp": {
+          "app1": {
+            "Dependencies": [
+              "servicebus.east"
+            ]
+          }
+        },
+        "servicebus": {
+          "east": {
+            "Dependencies": []
+          }
+        }
+      }
+    },
+    "production": {
+      "prod": {
+        "functionapp": {
+          "app1": {
+            "Dependencies": [
+              "servicebus.east"
+            ]
+          }
+        },
+        "servicebus": {
+          "east": {
+            "Dependencies": []
+          }
+        }
+      }
+    }
+  }
+}
