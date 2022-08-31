@@ -14,7 +14,7 @@ import (
 )
 
 // createCmd represents the create command
-var createCmd = &cobra.Command{
+var createScaffoldCmd = &cobra.Command{
 	Use:   "create",
 	Short: "A brief description of your command",
 	Long: `A longer description that spans multiple lines and likely contains examples
@@ -94,6 +94,6 @@ to quickly create a Cobra application.`,
 }
 
 func init() {
-	rootCmd.AddCommand(createCmd)
+	scaffoldCmd.AddCommand(createScaffoldCmd)
 
 }
