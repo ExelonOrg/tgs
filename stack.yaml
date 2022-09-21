@@ -1,0 +1,8 @@
+dev:
+  functionapp:
+    app1:
+      Dependencies:
+      - servicebus.east
+  servicebus:
+    east:
+      Dependencies: []

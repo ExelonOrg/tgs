@@ -32,51 +32,12 @@ to quickly create a Cobra application.`,
 		}
 		viper.SetConfigType("json")
 		viper.SetConfigName("config")
-		viper.SetDefault("base_modules", []string{"functionapp", "servicebus"})
 		initialConfig := []byte(`{
-			"base_modules": [
-			"functionapp",
-			"servicebus"
-			],
-			"groups": {
-				"non_production": {
-					"dev": {
-						"functionapp": {
-							"app1": {
-								"dependencies": [
-									"servicebus.east"
-								]
-							}
-						},
-						"servicebus": {
-							"east": {
-								"dependencies": [
-									
-								]
-							}
-						}
-					}
-				},
-				"production": {
-					"prod": {
-						"functionapp": {
-							"app1": {
-								"dependencies": [
-									"servicebus.east"
-								]
-							}
-						},
-						"servicebus": {
-							"east": {
-								"dependencies": [
-									
-								]
-							}
-						}
-					}
-				}
+			"stacks": {
+			  "non_production": ["dev", "test", "stage"],
+			  "production": ["prod"]
 			}
-		}`)
+		  }`)
 
 		data := structs.Config{}
 
@@ -84,7 +45,7 @@ to quickly create a Cobra application.`,
 		// for k, v := range data.Groups {
 		// 	fmt.Printf(k, v)
 		// }
-		viper.SetDefault("groups", data.Groups)
+		viper.SetDefault("stacks", data.Stacks)
 		viper.AddConfigPath(".tgs")
 		viper.SafeWriteConfig()
 

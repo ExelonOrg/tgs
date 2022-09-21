@@ -22,3 +22,20 @@ func ReadConfig() structs.Config {
 	return config
 
 }
+
+func ReadStack(pattern string) structs.Pattern {
+	viper.SetConfigType("yaml")
+	viper.SetConfigName(pattern)
+	viper.AddConfigPath(".tgs")
+	if err := viper.ReadInConfig(); err != nil {
+		log.Fatalf("Error reading config file, %s", err)
+	}
+
+	var config structs.Pattern
+	if err := viper.Unmarshal(&config); err != nil {
+		log.Fatalf("Unable to form into struct, %s", err)
+	}
+
+	return config
+
+}
