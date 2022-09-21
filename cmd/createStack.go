@@ -6,8 +6,12 @@ package cmd
 
 import (
 	"fmt"
+	"log"
 
+	"github.com/davoodharun/terragrunt-scaffolder/structs"
+	"github.com/go-yaml/yaml"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 // createCmd represents the create command
@@ -22,13 +26,38 @@ This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println(args)
-		// var age int
+		// if err := os.Mkdir(".tgs", os.ModePerm); err != nil {
+		// 	log.Fatal(err)
+		// }
+		viper.SetConfigType("yaml")
+		viper.SetConfigName(args[0])
+		initialConfig := []byte(`
+        functionapp:
+            app1:
+                dependencies:
+                - servicebus.east
+            app2:
+                dependencies:
+                - servicebus.east
+        servicebus:
+            east:
+                dependencies: []
+        `)
 
-		// //Take input from user
-		// fmt.Scan(&age)
+		data := structs.Pattern{}
 
-		// //Display age with statement
-		// fmt.Println("You are ", age, " years old.")
+		if err := yaml.Unmarshal(initialConfig, &data); err != nil {
+			log.Fatal(err)
+		}
+
+		// for k, v := range data {
+		// 	fmt.Printf(k, v)
+		// }
+		viper.SetDefault("functionapp", data["functionapp"])
+		viper.SetDefault("servicebus", data["servicebus"])
+
+		viper.AddConfigPath(".tgs")
+		viper.SafeWriteConfig()
 	},
 }
 
@@ -39,9 +68,9 @@ func init() {
 
 	// Cobra supports Persistent Flags which will work for this command
 	// and all subcommands, e.g.:
-	// createCmd.PersistentFlags().String("foo", "", "A help for foo")
+	// stackCmd.PersistentFlags().String("name", "", "A help for foo")
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
-	// createCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+
 }

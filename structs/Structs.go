@@ -1,24 +1,18 @@
 package structs
 
 type Config struct {
-	BaseModules []string         `mapstructure:"base_modules"`
-	Groups      map[string]Group `mapstructure:"groups"`
+	Stacks map[string][]string `json:"stacks"`
 }
 type App struct {
-	Dependencies []string `mapstructure:"dependencies"`
+	Dependencies []string `json:"dependencies"`
 }
 
 type AppType map[string]App
 
-type Stack map[string]AppType
+type Stack []string
 
-type Group map[string]Stack
+type Group map[string][]string
 
 type base_modules []string
 
-func Testing() {
-
-	// if err != nil {
-	// 	os.Exit(1)
-	// }
-}
+type Pattern map[string]AppType
