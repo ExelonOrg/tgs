@@ -2,6 +2,8 @@
 
 This repository is for a command line tool that helps users build a terragrunt project quickly in a semi-automated fashion.
 
+![release](https://img.shields.io/github/v/release/ExelonOrg/tgs)  ![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/ExelonOrg/tgs/Go/main)
+
 
 ## Quick Start
 
