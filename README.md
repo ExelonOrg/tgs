@@ -20,3 +20,70 @@ This repository is for a command line tool that helps users build a terragrunt p
   - Add module code in main.tf files
   - Fill out variables.tf and outputs.tf for all base modules
   - add inputs terragrunt.hcl files (global.hcl, dev.hcl, terragrunt.hcl, non_production.hcl etc.)
+  
+  
+ 
+## Scaffolding
+This tool assumes the general structure:
+```
+.
+└── workingdir/
+    ├── __base_modules/                                 folder that contains all the base modules that your project will use
+    │   ├── api/
+    │   │   ├── api.hcl                                 environment file that defines global inputs for all api projects; defines module source
+    │   │   ├── main.tf                                 top level terraform module; calls to shared tf registry or local module
+    │   │   ├── variables.tf                            input file that defines variables in main.tf            
+    │   │   └── outputs.tf                              output file that defines outputs that can be consumed by other modules\*
+    │   └── sql/
+    |   ### GROUPS ###
+    ├── non_production/
+    |   ├── non_production.hcl                           file that contains remote state configuration
+    |   | ### ENVIRONMENTS ###
+    │   ├── dev/
+    |   |   | ### MODULES ###
+    │   │   ├── sql/
+    │   │   └── api/
+    |   |       | #### APPS ###
+    │   │       ├── ace/
+    |   |       |   |__ dev.ace.east.appsettings.tpl    appsettings template for dev/ace
+    │   │       │   └── terragrunt.hcl                  configuration for dev/ace api; merges dev.env.hcl, _base_modules/api/env.hcl, terragrunt.hcl
+    │   │       ├── bge/
+    │   │       │   └── terragrunt.hcl
+    │   │       ├── comed/
+    │   │       │   └── terragrunt.hcl
+    │   │       ├── dpl/
+    │   │       │   └── terragrunt.hcl
+    │   │       ├── peco/
+    │   │       │   └── terragrunt.hcl
+    │   │       ├── pepco/
+    │   │       │   └── terragrunt.hcl
+    |   |       |__ dev.env.hcl
+    │   │       └── terragrunt.hcl                    * in this directory, you can run terragrunt run-all [init|plan|apply|destroy]
+    │   ├── test/
+    │   │   ├── sql/
+    │   │   └── api/
+    │   │       ├── ace/
+    │   │       ├── bge/
+    │   │       ├── ...
+    │   │       └── terragrunt.hcl
+    │   └── stage/
+    │       └── api/
+    │           ├── ace/
+    |           |   |__ stage.ace.east.appsettings.tpl
+    |           |   |__ stage.ace.central.appsettings.tpl 
+    │           ├── bge/
+    │           ├── ...
+    │           └── terragrunt.hcl                     contains input variables for two regions
+    └── production/
+        └── prod/
+ │       └── api/
+    │           ├── ace/
+    |           |   |__ prod.ace.east.appsettings.tpl
+    |           |   |__ prod.ace.central.appsettings.tpl 
+    │           ├── bge/
+    │           ├── ...
+    │           └── terragrunt.hcl
+
+
+
+```
