@@ -270,7 +270,7 @@ func (i DependencyBlock) Body(contents *hclwrite.Body) {
 	result_name := strings.Replace(str, replace, underscore, n)
 	provider := contents.AppendNewBlock("dependency", []string{result_name})
 	providerBody := provider.Body()
-	providerBody.SetAttributeValue("source_path", cty.StringVal(result_path))
+	providerBody.SetAttributeValue("config_path", cty.StringVal(result_path))
 	contents.AppendNewline()
 	return
 }
