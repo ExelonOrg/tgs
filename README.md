@@ -24,7 +24,7 @@ This repository is for a command line tool that helps users build a terragrunt p
   
  
 ## Scaffolding
-This tool assumes the general structure:
+this tool generates a base_modules folder:
 ```
 .
 └── workingdir/
@@ -35,6 +35,14 @@ This tool assumes the general structure:
     │   │   ├── variables.tf                            input file that defines variables in main.tf            
     │   │   └── outputs.tf                              output file that defines outputs that can be consumed by other modules\*
     │   └── sql/
+    |       |...
+    ...
+ ```
+This folder will contain all the *terraform* code for the building blocks of your terragrunt project. For example, if your architecuture requires a webserver, storage solution, and caching service in various configurations across different environments, you might have ```webserver/```, ```sql/```, and ```redis/``` sub folders that each contain terraform code to deploy those specific resources.
+ 
+ Terragrunt allows you to pass information between the different modules without having to control them with one singular terraform state file. More on this later.
+ 
+ ```
     |   ### GROUPS ###
     ├── non_production/
     |   ├── non_production.hcl                           file that contains remote state configuration
