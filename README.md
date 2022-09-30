@@ -15,3 +15,8 @@ This repository is for a command line tool that helps users build a terragrunt p
 6. Create your stacks/patterns by running ```tgs stack create <pattern-name>```; You should create a stack for every item listed in ```config.json```.
 7. Edit each of your stack files to your desired configuration
 8. Run ```tgs scaffold create``` to create your scaffolding
+9. Complete your terragrunt configuration by doing the following (at least):
+  - Add provider information to _base_modules modules
+  - Add module code in main.tf files
+  - Fill out variables.tf and outputs.tf for all base modules
+  - add inputs terragrunt.hcl files (global.hcl, dev.hcl, terragrunt.hcl, non_production.hcl etc.)
