@@ -39,36 +39,65 @@ to quickly create a Cobra application.`,
 		}
 
 		config = helpers.ReadConfig()
-		for group_key, v := range config.Stacks {
-			// log.Print(group_key, v)
+		// Capture any error
 
+		// iterate through groups (or stacks/patters i.e. production, non_production)
+		for group_key, group_value := range config.Stacks {
+
+			// read stack (file must exist TODO: create check)
 			var stack = helpers.ReadStack(group_key)
-			var group []string
-			for environment_key := range v {
+
+			// for each environment in group
+			for environment_key := range group_value.Environments {
+
+				// iterate over application types (base_modules) in stack yaml file
 				for apptype_key, apptype_value := range stack {
+					// for each application within module type
 					for app_key := range apptype_value {
-						group = append(group, fmt.Sprintf("%s/%s/%s/%s", group_key, v[environment_key], apptype_key, app_key))
-						// log.Print(group)
+						// create folder structure and application hcl file
+						appFile := structs.AppHclFile{
+							Path:            fmt.Sprintf("%s/%s/%s/%s", group_key, group_value.Environments[environment_key], apptype_key, app_key),
+							Environment:     group_value.Environments[environment_key],
+							Group:           group_key,
+							BaseModule:      apptype_key,
+							App:             app_key,
+							DependencyChain: apptype_value[app_key].Dependencies,
+						}
+						appFile.Write()
+						if myfile, err := os.Create(fmt.Sprintf("%s/%s/%s/%s/README.md", group_key, group_value.Environments[environment_key], apptype_key, app_key)); err != nil {
+							log.Fatal(err)
+							myfile.Close()
+						}
 					}
 				}
-			}
-			for i := 0; i < len(group); i++ {
-				if err := os.MkdirAll(group[i], os.ModePerm); err != nil {
-					log.Fatal(err)
-				}
 
-				if myfile, err := os.Create(fmt.Sprintf("%s/terragrunt.hcl", group[i])); err != nil {
-					log.Fatal(err)
-					myfile.Close()
+				environemntHclFile := structs.EnvironmentHclFile{
+					Name: group_value.Environments[environment_key],
+					Path: fmt.Sprintf("%s/%s", group_key, group_value.Environments[environment_key]),
 				}
+				environemntHclFile.Write()
+
+				// if myfile, err := os.Create(fmt.Sprintf("%s/%s/%s.hcl", group_key, group_value.Environments[environment_key], group_value.Environments[environment_key])); err != nil {
+				// 	log.Fatal(err)
+				// 	myfile.Close()
+				// }
+
+			}
+			groupHclFile := structs.GroupHclFile{
+				Path: group_key,
 			}
 
-			// if myfile, err := os.Create(fmt.Sprintf("%s/%s.hcl", group_key, group_key)); err != nil {
-			// 	log.Fatal(err)
-			// 	myfile.Close()
-			// }
+			groupHclFile.Write()
+			globalHclFile := structs.GlobalHclFile{}
+			globalHclFile.Write()
+
 			for k := range stack {
 				var str = fmt.Sprintf("_base_modules/%s", k)
+				baseModuleHclFile := structs.BaseModuleHclFile{
+					Name: k,
+				}
+
+				baseModuleHclFile.Write()
 				if err := os.MkdirAll(str, os.ModePerm); err != nil {
 					log.Fatal(err)
 				}
@@ -86,7 +115,8 @@ to quickly create a Cobra application.`,
 					log.Fatal(err)
 					myfile.Close()
 				}
-				if myfile, err := os.Create(fmt.Sprintf("%s/%s.hcl", str, k)); err != nil {
+
+				if myfile, err := os.Create(fmt.Sprintf("%s/providers.tf", str)); err != nil {
 					log.Fatal(err)
 					myfile.Close()
 				}
@@ -94,6 +124,17 @@ to quickly create a Cobra application.`,
 			}
 
 		}
+		// _ = filepath.Walk(".", func(path string, info os.FileInfo, err error) error {
+		// 	if err != nil {
+		// 		fmt.Println(err)
+		// 		return err
+		// 	}
+		// 	fmt.Printf("dir: %v: name: %s\n", info.IsDir(), path)
+		// 	return nil
+		// })
+		// if err != nil {
+		// 	fmt.Println(err)
+		// }
 
 	},
 }

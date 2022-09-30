@@ -34,8 +34,16 @@ to quickly create a Cobra application.`,
 		viper.SetConfigName("config")
 		initialConfig := []byte(`{
 			"stacks": {
-			  "non_production": ["dev", "test", "stage"],
-			  "production": ["prod"]
+			  "non_production": {
+				"Environments": ["dev", "test", "stage"],
+				"StateStorageName": "",
+				"StateStorageRG": ""
+			  },
+			  "production": {
+				"Environments": ["prod"],
+				"StateStorageName": "",
+				"StateStorageRG": ""
+			  }
 			}
 		  }`)
 
