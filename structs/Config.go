@@ -14,6 +14,8 @@ type Stack struct {
 	Environments            []string
 	StateStorageAccountName string
 	StateStorageRG          string
+	ContainerName           string
+	KeyPrefix               string
 }
 
 type Group map[string][]string

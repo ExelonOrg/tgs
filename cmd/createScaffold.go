@@ -84,7 +84,11 @@ to quickly create a Cobra application.`,
 
 			}
 			groupHclFile := structs.GroupHclFile{
-				Path: group_key,
+				Path:                    group_key,
+				ResourceGroupName:       group_value.StateStorageRG,
+				StateStorageAccountName: group_value.StateStorageAccountName,
+				ContainerName:           group_value.ContainerName,
+				KeyPrefix:               group_value.KeyPrefix,
 			}
 
 			groupHclFile.Write()

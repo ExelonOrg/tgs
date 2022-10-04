@@ -102,10 +102,10 @@ func (i GroupHclFile) Write() {
 	rootBody := hclFile.Body()
 	remoteStateBlock := RemoteStateBlock{
 		Backend:            "azurerm",
-		ResourceGroupName:  "test",
-		StorageAccountName: "test",
-		ContainerName:      "test",
-		KeyPrefix:          "eubnpapi",
+		ResourceGroupName:  i.ResourceGroupName,
+		StorageAccountName: i.StateStorageAccountName,
+		ContainerName:      i.ContainerName,
+		KeyPrefix:          i.KeyPrefix,
 	}
 	remoteStateBlock.Body(rootBody)
 	rootBody.SetAttributeRaw("inputs", hclwrite.TokensForObject([]hclwrite.ObjectAttrTokens{}))
@@ -186,8 +186,12 @@ func (i AppHclFile) Write() {
 }
 
 type GroupHclFile struct {
-	Path           string
-	TerraformBlock TerraformBlock
+	Path                    string
+	TerraformBlock          TerraformBlock
+	StateStorageAccountName string
+	ResourceGroupName       string
+	ContainerName           string
+	KeyPrefix               string
 }
 
 type TerraformBlock struct {

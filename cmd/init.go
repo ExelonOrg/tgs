@@ -36,13 +36,10 @@ to quickly create a Cobra application.`,
 			"stacks": {
 			  "non_production": {
 				"Environments": ["dev", "test", "stage"],
-				"StateStorageName": "",
-				"StateStorageRG": ""
-			  },
-			  "production": {
-				"Environments": ["prod"],
-				"StateStorageName": "",
-				"StateStorageRG": ""
+				"StateStorageAccountName": "eutfstatestorage",
+				"StateStorageRG": "XZC-E-N-EUWEB00-S-RGP-10",
+				"ContainerName": "example",
+				"KeyPrefix": "example"
 			  }
 			}
 		  }`)
